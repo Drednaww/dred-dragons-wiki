@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wiki Dred Dragons</title>
+  <style>
+
+/* Popup simples para comandos */
+.dragon-popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.dragon-popup-content {
+  background: #1b1b1b;
+  border: 2px solid #00bfff;
+  border-radius: 10px;
+  padding: 20px;
+  width: 90%;
+  max-width: 350px;
+  text-align: center;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.dragon-popup-content h2 {
+  color: #00bfff;
+  margin-top: 0;
+}
+
+.dragon-popup-content code {
+  display: block;
+  background: #111;
+  color: #00ffea;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.close-btn {
+  background: #00bfff;
+  border: none;
+  color: black;
+  padding: 8px 15px;
+  margin-top: 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.close-btn:hover {
+  background: white;
+}
+
+
+    /* Botões de redes sociais fixos */
+.social-buttons {
+  position: fixed;
+  bottom: 20px;
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 30px;
+  pointer-events: none; /* permite clicar no fundo */
+  z-index: 1002;
+}
+
+.social-buttons a {
+  pointer-events: all; /* reativa o clique só nos botões */
+}
+
+.social-btn {
+  width: 150px;
+  height: 150px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  filter: drop-shadow(0 0 4px #00bfff);
+}
+
+.social-btn:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 8px #00bfff);
+}
+
+    body {
+      margin: 0;
+      font-family: 'Minecraft History', Arial, sans-serif;
+      background-color: #0d0d0d;
+      color: white;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Botão de menu para mobile */
+    #menu-toggle {
+      display: none;
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      background: #00bfff;
+      color: black;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      font-size: 20px;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    /* Barra lateral */
+    nav {
+      width: 220px;
+      background-color: #1b1b1b;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-right: 3px solid #333;
+      transition: left 0.3s;
+    }
+
+    nav h2 {
+      color: #00bfff;
+      text-align: center;
+      margin-bottom: 15px;
+      font-size: 20px;
+      text-transform: uppercase;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: white;
+      background: #2a2a2a;
+      padding: 10px;
+      border-radius: 8px;
+      display: block;
+      text-align: center;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+
+    nav a:hover {
+      background: #00bfff;
+      color: black;
+    }
+
+    .submenu {
+      margin-left: 10px;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .submenu.show {
+      display: flex;
+    }
+
+    /* Conteúdo principal */
+    main {
+      flex: 1;
+      padding: 40px;
+    }
+
+    section {
+      display: none;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .download-section, .dragon-section {
+      margin-top: 20px;
+      background: #1b1b1b;
+      padding: 20px;
+      border-radius: 10px;
+      border: 2px solid #00bfff;
+    }
+
+    .download-section h3, .dragon-section h2 {
+      margin-top: 0;
+      color: #00bfff;
+    }
+
+    .download-section a {
+      display: inline-block;
+      margin-top: 10px;
+      background: #00bfff;
+      color: black;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .download-section a:hover {
+      background: white;
+    }
+
+    img.logo {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #777;
+    }
+
+    /* Cards dos dragões */
+    .dragon-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .dragon-card {
+      background: #1a1a1a;
+      border: 2px solid #00bfff;
+      border-radius: 10px;
+      width: 280px;
+      overflow: hidden;
+      transition: 0.3s;
+    }
+
+    .dragon-card:hover {
+      transform: translateY(-5px);
+      border-color: white;
+    }
+
+    .dragon-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      background: #111;
+    }
+
+    .dragon-info {
+      padding: 15px;
+    }
+
+    .dragon-info h3 {
+      color: #00bfff;
+      margin: 0 0 10px;
+      font-size: 20px;
+    }
+
+    .dragon-info p {
+      font-size: 14px;
+      color: #ccc;
+      margin: 0;
+    }
+
+    /* Responsivo */
+    @media screen and (max-width: 768px) {
+      #menu-toggle {
+        display: block;
+      }
+
+      nav {
+        position: fixed;
+        left: -250px;
+        top: 0;
+        height: 100%;
+        width: 220px;
+        z-index: 1000;
+      }
+
+      nav.show {
+        left: 0;
+      }
+
+      main {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+<!-- POPUP DO COMANDO -->
+<div id="dragonPopup" class="dragon-popup">
+  <div class="dragon-popup-content">
+    <h2 id="popupTitle">Comandos</h2>
+    <div id="popupSections"></div>
+    <button class="close-btn" onclick="closePopup()">Fechar</button>
+  </div>
+</div>
+
+
+  <!-- Botão de menu para mobile -->
+  <button id="menu-toggle">☰</button>
+
+  <nav>
+    <h2>Dred Dragon's</h2>
+    <a href="#" onclick="showSection('home')">Home</a>
+    <a href="#" onclick="toggleSubmenu()">Dragões</a>
+    <div class="submenu" id="submenu-dragoes">
+      <a href="#" onclick="showSection('addon')">Addon</a>
+      <a href="#" onclick="showSection('mod')">Mod</a>
+    </div>
+    <a href="#" onclick="showSection('download')">Download</a>
+  </nav>
+
+  <main>
+    <!-- HOME -->
+    <section id="home" class="active">
+      <img src="assets/logo.png" alt="Dred Dragons Logo" class="logo" />
+      <footer>© 2025 Dred Dragons - Todos os direitos reservados.
+
+        <div class="social-buttons">
+  <a href="https://www.youtube.com/@Drednaww" target="_blank">
+    <img src="assets/youtube.png" alt="YouTube" class="social-btn youtube">
+  </a>
+  <a href="https://discord.gg/XnfR25BnMY" target="_blank">
+    <img src="assets/discord.png" alt="Discord" class="social-btn discord">
+  </a>
+</div>
+
+      </footer>
+    </section>
+
+    <!-- ADDON -->
+    <section id="addon">
+      <h1>Addon</h1>
+      <p>Veja todos os dragões disponíveis na versão Bedrock.</p>
+
+      <div class="dragon-container">
+        <div class="dragon-card"><img src="assets/gronckle.png" alt="Gronckle" ><div class="dragon-info"><h3>Gronckle</h3><p>Spawn: Montanhas.</p><p>Como Domar: Pedra, Pedregulho, Diorito</p></div></div>
+        <div class="dragon-card"><img src="assets/cavern.png" alt="Invasor de Cavernas"><div class="dragon-info"><h3>Invasor de Cavernas</h3><p>Spawn: Mesa.</p><p>Como Domar: Ovo de Galinha</p></div></div>
+        <div class="dragon-card"><img src="assets/caudafina.png" alt="Cauda Fina"><div class="dragon-info"><h3>Cauda Fina</h3><p>Spawn: Selva.</p><p>Como Domar: Bacalhau Cru, Bacalhau Assado.</p></div></div>
+        <div class="dragon-card"><img src="assets/deathsong.png" alt="Canção Da Morte"><div class="dragon-info"><h3>Canção Da Morte</h3><p>Spawn: Floresta Florida</p><p>Como Domar: Bacalhau Cru</p></div></div>
+        <div class="dragon-card"><img src="assets/floodfang.png" alt="Presa de Inundação"><div class="dragon-info"><h3>Presa de Inundação</h3><p>Spawn: Praias e Rios.</p><p>Como Domar: Bacalhau Cru, Bacalhau Assado, Salmão Cru, Salmão Assado.</p></div></div>
+        <div class="dragon-card"><img src="assets/seashocker.png" alt="Terror Dos Mares"><div class="dragon-info"><h3>Terror Dos Mares</h3><p>Spawn: Oceanos.</p><p>Como Domar: Bacalhau Cru, Bacalhau Assado, Salmão Cru, Salmão Assado.</p></div></div>
+        <div class="dragon-card"><img src="assets/slitherwing_f.png" alt="Asa Serpente Fêmea"><div class="dragon-info"><h3>Asa Serpente Fêmea</h3><p>Spawn: Planices.</p><p>Como Domar: Carne de Porco Cru ou Assada</p></div></div>
+        <div class="dragon-card"><img src="assets/slitherwing_m.png" alt="Asa Serpente Macho"><div class="dragon-info"><h3>Asa Serpente Macho</h3><p>Spawn: Planices.</p><p>Como Domar: Carne de Porco Cru ou Assada</p></div></div>
+        <div class="dragon-card"><img src="assets/speed.png" alt="Picada Veloz"><div class="dragon-info"><h3>Picada Veloz</h3><p>Spawn: Sempre perto do Picada Veloz Alfa.</p><p>Como Domar: Salmão Cru ou Assado</p><p>Condições Especias: Tem que ser filhote para ser domado</p></div></div>
+        <div class="dragon-card"><img src="assets/speed_a.png" alt="Picada Veloz Alfa"><div class="dragon-info"><h3>Picada Veloz Alfa</h3><p>Spawn: Savana.</p><p>Como Domar: Salmão Cru ou Assado</p><p>Condições Especias: Tem que ser filhote para ser domado</p></div></div>
+        
+      </div>
+    </section>
+
+    <!-- MOD -->
+    <section id="mod">
+      <h1>Mod</h1>
+      <p>Conheça os dragões disponíveis na versão Java.</p>
+
+      <div class="dragon-container">
+
+        <!-- INVASOR -->
+        <div class="dragon-card" onclick="openDragonPopup('Cavern Crasher', [
+  { titulo: 'Comandos', itens: [
+    '/summon isleofberk:stinger ~ ~ ~ {VariantName:cavern_crasher}',
+    '/summon isleofberk:stinger ~ ~ ~ {VariantName:angel}',
+    '/summon isleofberk:stinger ~ ~ ~ {VariantName:cavern_flower}',
+    '/summon isleofberk:stinger ~ ~ ~ {VariantName:cavern_dirt}',
+    '/summon isleofberk:stinger ~ ~ ~ {VariantName:cavern_crasher_race}',
+    '/summon isleofberk:stinger ~ ~ ~ {VariantName:kratos}',
+    '/summon isleofberk:stinger ~ ~ ~ {VariantName:cristal}',
+    '/summon isleofberk:stinger ~ ~ ~ {VariantName:fandango}',
+    '/summon isleofberk:stinger ~ ~ ~ {VariantName:flopper}'
+  ]}])">
+  <img src="assets/cavern.png" alt="Invasor de Cavernas"><div class="dragon-info"><h3>Invasor de Cavernas</h3><p>Spawn: Eroded_badlands, Badlands, Wooded_badlands.</p><p>Como Domar: Frango Cru.</p></div></div>
+
+
+        <!-- CAUDA FINA -->
+        <div class="dragon-card" onclick="openDragonPopup('Threadtail', [
+  { titulo: 'Comandos', itens: [
+    '/summon isleofberk:monstrous_nightmare ~ ~ ~ {VariantName:threadtail}',
+    '/summon isleofberk:monstrous_nightmare ~ ~ ~ {VariantName:threadtail_blue}',
+    '/summon isleofberk:monstrous_nightmare ~ ~ ~ {VariantName:threadtail_rose}',
+    '/summon isleofberk:monstrous_nightmare ~ ~ ~ {VariantName:threadtail_moss}',
+    '/summon isleofberk:monstrous_nightmare ~ ~ ~ {VariantName:threadtail_sunset}',
+    '/summon isleofberk:monstrous_nightmare ~ ~ ~ {VariantName:threadtail_purple}',
+    '/summon isleofberk:monstrous_nightmare ~ ~ ~ {VariantName:threadtail_black}',
+    '/summon isleofberk:monstrous_nightmare ~ ~ ~ {VariantName:threadtail_white}',
+  ]}])">
+  <img src="assets/caudafina.png" alt="Cauda Fina"><div class="dragon-info"><h3>Cauda Fina</h3><p>Spawn: Sparse_jungle, Jungle, Bamboo_jungle.</p><p>Como Domar: Bacalhau Cru.</p></div></div>
+
+
+
+        <!-- CANÇÃO DA MORTE -->  
+        <div class="dragon-card" onclick="openDragonPopup('Deathsong', [
+  { titulo: 'Comandos', itens: [
+    '/summon isleofberk:triple_stryke ~ ~ ~ {VariantName:deathsong}',
+    '/summon isleofberk:triple_stryke ~ ~ ~ {VariantName:deathsong_black}',
+    '/summon isleofberk:triple_stryke ~ ~ ~ {VariantName:deathsong_bull}',
+    '/summon isleofberk:triple_stryke ~ ~ ~ {VariantName:avada_kedavra}',
+    '/summon isleofberk:triple_stryke ~ ~ ~ {VariantName:deathsong_white}',
+    '/summon isleofberk:triple_stryke ~ ~ ~ {VariantName:deathsong_dg}',
+    '/summon isleofberk:triple_stryke ~ ~ ~ {VariantName:deathsong_pastel}',
+    '/summon isleofberk:triple_stryke ~ ~ ~ {VariantName:deathsong_kaidou}',
+    '/summon isleofberk:triple_stryke ~ ~ ~ {VariantName:deathsong_purple}',
+    '/summon isleofberk:triple_stryke ~ ~ ~ {VariantName:deathsong_nadder}',
+    '/summon isleofberk:triple_stryke ~ ~ ~ {VariantName:deathsong_candy}',
+    '/summon isleofberk:triple_stryke ~ ~ ~ {VariantName:deathsong_mosura}',
+    '/summon isleofberk:triple_stryke ~ ~ ~ {VariantName:deathsong_mosura_orange}',
+    '/summon isleofberk:triple_stryke ~ ~ ~ {VariantName:deathsong_redfly}',
+    '/summon isleofberk:triple_stryke ~ ~ ~ {VariantName:deathsong_green}',
+    '/summon isleofberk:triple_stryke ~ ~ ~ {VariantName:deathsong_floral}',
+    '/summon isleofberk:triple_stryke ~ ~ ~ {VariantName:deathsong_monarch}',
+  ]}])">
+<img src="assets/deathsong.png" alt="Canção Da Morte"><div class="dragon-info"><h3>Canção Da Morte</h3><p>Spawn: Sunflower_plains</p><p>Como Domar: Bone Feed Bundle.</p><p></p></div></div>
+
+
+
+        <!-- ERUPTODON -->
+      <div class="dragon-card" onclick="openDragonPopup('Eruptodon', [
+  { titulo: 'Comandos', itens: [
+    '/summon isleofberk:gronckle ~ ~ ~ {VariantName:eruptodon}',
+    '/summon isleofberk:gronckle ~ ~ ~ {VariantName:eruptodon_green}',
+    '/summon isleofberk:gronckle ~ ~ ~ {VariantName:eruptodon_moss}',
+    '/summon isleofberk:gronckle ~ ~ ~ {VariantName:eruptodon_white}',
+    '/summon isleofberk:gronckle ~ ~ ~ {VariantName:eruptodon_radioactive}',
+    '/summon isleofberk:gronckle ~ ~ ~ {VariantName:eruptodon_kaiju}',
+    '/summon isleofberk:gronckle ~ ~ ~ {VariantName:laboon}',
+  ]}])">
+      <img src="assets/eruptodon.png" alt="Eruptidão"><div class="dragon-info"><h3>Eruptidão</h3><p>Spawn: Gerado pelo mundo em uma arena na badlands, derrotando ele vai dropar um ovo que pode vim uma das suas variantes.</p><p>Como Domar: Bloco de Magma.</p></div></div>
+
+
+
+        <!-- PRESA DE INUNDAÇÃO -->
+        <div class="dragon-card" onclick="openDragonPopup('Floodfang', [
+  { titulo: 'Comandos', itens: [
+    '/summon isleofberk:gronckle ~ ~ ~ {VariantName:floodfang}',
+    '/summon isleofberk:gronckle ~ ~ ~ {VariantName:floodfang_green}',
+    '/summon isleofberk:gronckle ~ ~ ~ {VariantName:floodfang_purple}',
+    '/summon isleofberk:gronckle ~ ~ ~ {VariantName:floodfang_red}',
+    '/summon isleofberk:gronckle ~ ~ ~ {VariantName:floodfang_orc}',
+    '/summon isleofberk:gronckle ~ ~ ~ {VariantName:momoo}',
+    '/summon isleofberk:gronckle ~ ~ ~ {VariantName:lugia}',
+    '/summon isleofberk:gronckle ~ ~ ~ {VariantName:kyogre}',
+  ]}])"><img src="assets/floodfang.png" alt="Presa de Inundação"><div class="dragon-info"><h3>Presa de Inundação</h3><p>Spawn: Beach, River.</p><p>Como Domar: Peixe Tropical.</p></div></div>
+
+
+
+        <!-- TERROR DOS MARES -->
+        <div class="dragon-card" onclick="openDragonPopup('Seashocker', [
+  { titulo: 'Comandos', itens: [
+    '/summon isleofberk:skrill ~ ~ ~ {VariantName:seashocker}',
+'/summon isleofberk:skrill ~ ~ ~ {VariantName:ardo_nica}',
+'/summon isleofberk:skrill ~ ~ ~ {VariantName:seashocker_enseada}',
+'/summon isleofberk:skrill ~ ~ ~ {VariantName:seashocker_evil}',
+'/summon isleofberk:skrill ~ ~ ~ {VariantName:seashocker_marespectro}',
+'/summon isleofberk:skrill ~ ~ ~ {VariantName:solar_chuvisco}',
+  ]}])"><img src="assets/seashocker.png" alt="Terror Dos Mares"><div class="dragon-info"><h3>Terror Dos Mares</h3><p>Spawn: Seu ninho aparece em Oceanos.</p><p>Como Domar: Peixe Tropical.</p></div></div>
+
+
+        <!-- ASA SERPENTE FÊMEA -->
+        <div class="dragon-card" onclick="openDragonPopup('Slitherwing Female', [
+  { titulo: 'Comandos', itens: [
+    '/summon isleofberk:stinger ~ ~ ~ {VariantName:slitherwing}',
+'/summon isleofberk:stinger ~ ~ ~ {VariantName:slitherwing_gree}',
+'/summon isleofberk:stinger ~ ~ ~ {VariantName:slitherwing_blue}',
+'/summon isleofberk:stinger ~ ~ ~ {VariantName:slitherwing_rose}',
+  ]}])"><img src="assets/slitherwing_f.png" alt="Asa Serpente Fêmea"><div class="dragon-info"><h3>Asa Serpente Fêmea</h3><p>Spawn: Encontrado em ninhos e tem a chance de ter um ovo da versão macho Asa de Titan
+.</p><p>Como Domar: Carneiro Cru.</p></div></div>
+
+
+
+        <!-- ASA SERPENTE MACHO -->
+        <div class="dragon-card" onclick="openDragonPopup('Slitherwing Male', [
+  { titulo: 'Comandos', itens: [
+    '/summon isleofberk:triple_stryke ~ ~ ~ {VariantName:slitherwing}',
+'/summon isleofberk:triple_stryke ~ ~ ~ {VariantName:slitherwing_white}',
+'/summon isleofberk:triple_stryke ~ ~ ~ {VariantName:slitherwing_black}',
+'/summon isleofberk:triple_stryke ~ ~ ~ {VariantName:slitherwing_blue}',
+'/summon isleofberk:triple_stryke ~ ~ ~ {VariantName:slitherwing_titan}',
+  ]}])"><img src="assets/slitherwing_m.png" alt="Asa Serpente Macho"><div class="dragon-info"><h3>Asa Serpente Macho</h3><p>Spawn: Savanna, Sparse_jungle.</p><p>Como Domar: Bife Cru.</p></div></div>
+      </div>
+    </section>
+
+    <!-- DOWNLOAD -->
+    <section id="download">
+      <h1>Download</h1>
+
+      <div class="download-section">
+        <h3>Baixar o Mod (Java Edition)</h3>
+        <h3>Changelog Version 2.0</h3>
+        <ul><li>2 novos dragões</li>
+          <li>Invasor de Cavernas e Cauda Fina</li>
+          <li>Remodel no Canção da morte</li>
+          <li>Problemas com Spawn corrigidos</li>
+          <li>Livro dos dragões completo</li>
+          <li>Agora é possivel usar Floodfang e Terror dos mares na água</li>
+
+          </ul>
+        <a href="#https://modrinth.com/mod/dred-dragons/version/2.0.0">Baixar Mod Modrinth</a>
+        <a href="#">Baixar Mod CurseForge</a>
+      </div>
+
+      <div class="download-section">
+        <h3>Baixar o Addon (Bedrock Edition)</h3>
+        <h3>Changelog Version 2.0</h3>
+        <ul><li>4 novos dragões</li>
+          <li>Invasor de cavernas, Canção da Morte, Cauda Fina e Gronckle</li>
+          <li>Novas animações de andar, correr e afundar enquanto voa com o dragão</li>
+          <li>Alguns bugs corrigidos</li>
+          <li>Novas cores para o picada veloz alfa</li>
+        
+        </ul>
+        <p>Versão para Minecraft Bedrock 1.21+</p>
+        <a href="#https://seulink.net/dreddragonsv2">Baixar Addon</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+
+// Abre o popup com várias seções de texto e listas
+function openDragonPopup(name, sections) {
+  const title = document.getElementById("popupTitle");
+  const container = document.getElementById("popupSections");
+
+  title.textContent = name;
+  container.innerHTML = ""; // limpa o conteúdo anterior
+
+  sections.forEach(sec => {
+    const sectionDiv = document.createElement("div");
+    sectionDiv.style.marginTop = "15px";
+
+    const heading = document.createElement("h3");
+    heading.textContent = sec.titulo;
+    heading.style.color = "#00bfff";
+    heading.style.marginBottom = "5px";
+    sectionDiv.appendChild(heading);
+
+    const list = document.createElement("ul");
+    list.style.textAlign = "left";
+    list.style.margin = "0 auto";
+    list.style.display = "inline-block";
+
+    sec.itens.forEach(item => {
+      const li = document.createElement("li");
+      li.textContent = item;
+      li.style.color = "#00ffea";
+      li.style.marginBottom = "4px";
+      list.appendChild(li);
+    });
+
+    sectionDiv.appendChild(list);
+    container.appendChild(sectionDiv);
+  });
+
+  document.getElementById("dragonPopup").style.display = "flex";
+}
+
+// Fecha o popup
+function closePopup() {
+  document.getElementById("dragonPopup").style.display = "none";
+}
+
+
+    function showSection(id) {
+      document.querySelectorAll('main section').forEach(sec => sec.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+
+      // Fecha menu no mobile ao clicar em uma seção
+      if (window.innerWidth <= 768) {
+        document.querySelector('nav').classList.remove('show');
+      }
+    }
+
+    function toggleSubmenu() {
+      document.getElementById('submenu-dragoes').classList.toggle('show');
+    }
+
+    // Toggle da barra lateral
+    const menuToggle = document.getElementById('menu-toggle');
+    menuToggle.addEventListener('click', () => {
+      document.querySelector('nav').classList.toggle('show');
+    });
+  </script>
+</body>
+</html>
