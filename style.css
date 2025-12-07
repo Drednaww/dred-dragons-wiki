@@ -341,7 +341,12 @@ footer {
 
 @media screen and (max-width: 768px) {
   img.logo {
-    margin-left: 0 !important;
+    margin-left: -80px !important;
+  }
+
+  .social-btn.discord {
+    transform: translateX(-100px);
   }
 }
+
 
