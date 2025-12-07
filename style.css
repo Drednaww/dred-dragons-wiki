@@ -338,20 +338,3 @@ footer {
     padding: 20px;
   }
 }
-
-@media screen and (max-width: 768px) {
-  /* logo: mantém centralizada mas desloca levemente para a esquerda */
-  img.logo {
-    margin-left: 0 !important;
-    /* ajuste o valor -12px para mais/menos deslocamento */
-    transform: translateX(-12px);
-    transition: transform 0.15s ease;
-  }
-
-  /* Discord: move só o botão do Discord para a esquerda */
-  .social-btn.discord {
-    transform: translateX(-12px); /* mesmo valor que a logo para ficar alinhado */
-    transition: transform 0.15s ease;
-  }
-}
-
